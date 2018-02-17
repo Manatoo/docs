@@ -138,3 +138,25 @@ aside {
         margin-#{left}: 0;
     }
 }
+
+///////
+// LOGO
+///////
+
+$white: #fff;
+$dark-blue: #3157a5;
+
+.logoDiv {
+  background-color: $white;
+  border-radius: 3px;
+  color: $dark-blue;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 40px;
+  margin-left: -20px;
+  margin-right: 5px;
+  text-align: center;
+  width: 40px;
+}
