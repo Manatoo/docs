@@ -22,15 +22,22 @@ search: true
 
 Welcome to the Manatoo API! You can use our API to access Manatoo API endpoints, which helps you create, update, and view tasks to manage your Manatoo task list.
 
-We have language bindings in cURL, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+We have language bindings in shell, Ruby, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+
+# Installation
+
+To install cURL, please checkout <a href="https://curl.haxx.se/" target="_blank">https://curl.haxx.se/</a>.
+
+To install the ruby gem, please visit <a href="https://github.com/Manatoo/ruby" target="_blank">https://github.com/Manatoo/ruby</a>.
+
+To install the node package, please visit <a href="https://github.com/Manatoo/node" target="_blank">https://github.com/Manatoo/node</a>.
 
 # Authentication
 
-> To authorize, use this code:
+> To authenticate, use this code:
 
 ```ruby
 require 'manatoo'
-
 Manatoo.api_key = 'API_KEY'
 ```
 

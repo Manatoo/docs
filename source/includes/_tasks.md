@@ -6,8 +6,12 @@
 require 'manatoo'
 Manatoo.api_key = 'API_KEY'
 
-# task is an instance that helps you easily access a task's attributes
-task = Manatoo::Task.find('y6DZ0IDaNpWKsnqQYbVUA0v0pNEUQQ')
+# by default Manatoo::Task.find returns the json body
+json = Manatoo::Task.find('y6DZ0IDaNpWK')
+
+# but you can pass in true as the second parameter to return a task instance
+# the task instance helps you easily access its attributes
+task = Manatoo::Task.find('y6DZ0IDaNpWK', true)
 
 # e.g. getting the title and description
 title = task.title
@@ -15,18 +19,26 @@ description = task.description
 
 # you can still get the json hash displayed below
 json = task.last_json_response
+
+# Note: the ruby json Hash has its keys snake_cased to follow the ruby naming conventions
 ```
 
 ```shell
-curl "https://manatoo.io/api/tasks/y6DZ0IDaNpWKsnqQYbVUA0v0pNEUQQ" \
+curl "https://manatoo.io/api/tasks/y6DZ0IDaNpWK" \
   -u "API_KEY"
 ```
 
 ```javascript
 var manatoo = require('manatoo')('API_KEY');
 
-manatoo.task.find('y6DZ0IDaNpWKsnqQYbVUA0v0pNEUQQ').then(function(task) {
-  // task is an instance that helps you easily access a task's attributes
+// by default manatoo.task.find returns the json body
+manatoo.task.find('y6DZ0IDaNpWK').then(function(json) {
+  return json
+});
+
+// but you can pass in true as the second parameter to return a task instance
+// the task instance helps you easily access its attributes
+manatoo.task.find('y6DZ0IDaNpWK', true).then(function(task) {
   // e.g. getting the title and description
   var title = task.title;
   var description = task.description;
@@ -41,13 +53,13 @@ manatoo.task.find('y6DZ0IDaNpWKsnqQYbVUA0v0pNEUQQ').then(function(task) {
 ```json
 {
   "data": {
-    "id": "y6DZ0IDaNpWKsnqQYbVUA0v0pNEUQQ",
+    "id": "y6DZ0IDaNpWK",
     "title": "Draft an email",
     "data": {
       "contactName": "Adam O."
     },
     "description": "Draft a sample marketing email to Adam",
-    "slug": "y6DZ0IDaNpWKsnqQYbVUA0v0pNEUQQ",
+    "slug": "y6DZ0IDaNpWK",
     "status": "open",
     "weight": 1,
     "duration": 7200,
@@ -59,10 +71,10 @@ manatoo.task.find('y6DZ0IDaNpWKsnqQYbVUA0v0pNEUQQ').then(function(task) {
     "createdAt": "2018-02-16T08:02:59.521Z",
     "dueAt": "2018-02-20T08:02:59.521Z",
     "startedAt": "2018-02-18T10:02:59.521Z",
-    "listId": "meqRnGLW6tEOwCcxofz_ZYxsdredxg",
+    "listId": "meqRnGLW6tEO",
     "users": [
       {
-        "token": "PJwjWbo0thleCsA_A7XSfKRSAxNz5w",
+        "token": "PJwjWbo0thle",
         "profileImageUrl": "https://imgur.com/URBc9Kb.png",
         "firstName": "Ashley",
         "lastName": "Vonn"
@@ -90,21 +102,38 @@ task_id | The id of the task you are retrieving.
 require 'manatoo'
 Manatoo.api_key = 'API_KEY'
 
-# task is an instance that helps you easily access a task's attributes
-task = Manatoo::Task.create({
-  list_id: 'meqRnGLW6tEOwCcxofz_ZYxsdredxg',
+# by default Manatoo::Task.create returns the json body
+json = Manatoo::Task.create({
+  list_id: 'meqRnGLW6tEO',
   title: "Check the sales data on Product X",
   description: "Pull out sales data from April",
   due_at: "2018-02-24T18:02:59.521Z",
   weight: "9",
   status: "started",
   labels: ["sales", "urgent"],
-  users: ["john@example.com", "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"],
+  users: ["john@example.com", "PJwjWbo0thle"],
   data: {
     month: "April",
     region: "us-west"
   }
 })
+
+# but you can pass in true as the second parameter to return a task instance
+# the task instance helps you easily access its attributes
+task = Manatoo::Task.create({
+  list_id: 'meqRnGLW6tEO',
+  title: "Check the sales data on Product X",
+  description: "Pull out sales data from April",
+  due_at: "2018-02-24T18:02:59.521Z",
+  weight: "9",
+  status: "started",
+  labels: ["sales", "urgent"],
+  users: ["john@example.com", "PJwjWbo0thle"],
+  data: {
+    month: "April",
+    region: "us-west"
+  }
+}, true)
 
 # e.g. getting the title and description
 title = task.title
@@ -112,12 +141,14 @@ description = task.description
 
 # you can still get the json hash displayed below
 json = task.last_json_response
+
+# Note: the ruby json Hash has its keys snake_cased to follow the ruby naming conventions
 ```
 
 ```shell
 curl "https://manatoo.io/api/tasks" \
   -u "API_KEY" \
-  -d list_id='meqRnGLW6tEOwCcxofz_ZYxsdredxg' \
+  -d list_id='meqRnGLW6tEO' \
   -d title="Check the sales data on Product X" \
   -d description="Pull out sales data from April" \
   -d due_at="2018-02-24T18:02:59.521Z" \
@@ -126,28 +157,47 @@ curl "https://manatoo.io/api/tasks" \
   -d labels[]="sales" \
   -d labels[]="urgent" \
   -d users[]="john@example.com" \
-  -d users[]="PJwjWbo0thleCsA_A7XSfKRSAxNz5w" \
+  -d users[]="PJwjWbo0thle" \
   -d data[month]="April" \
   -d data[region]="us-west"
 ```
 
 ```javascript
 var manatoo = require('manatoo')('API_KEY');
-
+// by default manatoo.task.create returns the json body
 manatoo.task.create({
-  listId: 'meqRnGLW6tEOwCcxofz_ZYxsdredxg',
+  listId: 'meqRnGLW6tEO',
   title: "Check the sales data on Product X",
   description: "Pull out sales data from April",
   dueAt: "2018-02-24T18:02:59.521Z",
   weight: "9",
   status: "started",
   labels: ["sales", "urgent"],
-  users: ["john@example.com", "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"],
+  users: ["john@example.com", "PJwjWbo0thle"],
   data: {
     month: "April",
     region: "us-west"
   }
-}).then(function(task) {
+}).then(function(json) {
+  return json
+});
+
+// but you can pass in true as the second parameter to return a task instance
+// the task instance helps you easily access its attributes
+manatoo.task.create({
+  listId: 'meqRnGLW6tEO',
+  title: "Check the sales data on Product X",
+  description: "Pull out sales data from April",
+  dueAt: "2018-02-24T18:02:59.521Z",
+  weight: "9",
+  status: "started",
+  labels: ["sales", "urgent"],
+  users: ["john@example.com", "PJwjWbo0thle"],
+  data: {
+    month: "April",
+    region: "us-west"
+  }
+}, true).then(function(task) {
   // task is an instance that helps you easily access a task's attributes
   // e.g. getting the title and description
   var title = task.title;
@@ -163,14 +213,14 @@ manatoo.task.create({
 ```json
 {
   "data": {
-    "id": "tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg",
+    "id": "tRhW-T_EV5gy",
     "title": "Check the sales data on Product X",
     "data": {
       "month": "April",
       "region": "us-west"
     },
     "description": "Pull out sales data from April",
-    "slug": "tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg",
+    "slug": "tRhW-T_EV5gy",
     "status": "started",
     "weight": 9,
     "duration": null,
@@ -182,16 +232,16 @@ manatoo.task.create({
     "createdAt": "2018-02-16T22:16:26.144Z",
     "dueAt": "2018-02-24T18:02:59.521Z",
     "startedAt": "2018-02-16T22:16:26.144Z",
-    "listId": "meqRnGLW6tEOwCcxofz_ZYxsdredxg",
+    "listId": "meqRnGLW6tEO",
     "users": [
       {
-        "token": "hrKavGdYRU7YBChs3swqeoDvPl_azw",
+        "token": "hrKavGdYRU7Y",
         "profileImageUrl": null,
         "firstName": "John",
         "lastName": "Lowe"
       },
       {
-        "token": "PJwjWbo0thleCsA_A7XSfKRSAxNz5w",
+        "token": "PJwjWbo0thle",
         "profileImageUrl": "https://imgur.com/URBc9Kb.png",
         "firstName": "Ashley",
         "lastName": "Vonn"
@@ -201,13 +251,13 @@ manatoo.task.create({
 }
 ```
 
-This endpoint create a task. There are two required parameters: `title` and `list_id`.
+This endpoint create a task. There are two required parameters: `title` and `list_id`. You will need an existing list; you can create one through our web app.
 
-The `title` briefly describes what the task is.  The `list_id` can be found in the overview section of a list's page or can be taken from a list's url: `https://manatoo.io/lists/<list_id>` or  `https://manatoo.io/lists/<list_id>/tasks/tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg`.
+The `title` briefly describes what the task is.  The `list_id` can be found in the overview section of a list's page or can be taken from a list's url: `https://manatoo.io/lists/<list_id>`.
 
 ### HTTP Request
 
-`POST http://example.com/api/tasks`
+`POST https://manatoo.io/api/tasks`
 
 ### URL Parameters
 
@@ -236,17 +286,19 @@ Manatoo.api_key = 'API_KEY'
 # This can be done two ways
 
 # 1. If you have a task instance
-task = Manatoo::Task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+task = Manatoo::Task.find('tRhW-T_EV5gy', true)
 task.update({ title: "Update the customer excel sheet" })
 
 # 2. If you have a task id
-Manatoo::Task.update('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', {
+Manatoo::Task.update('tRhW-T_EV5gy', {
   title: "Update the customer excel sheet"
 })
+
+# Note: the ruby json Hash has its keys snake_cased to follow the ruby naming conventions
 ```
 
 ```shell
-curl "https://manatoo.io/api/tasks/tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg" \
+curl "https://manatoo.io/api/tasks/tRhW-T_EV5gy" \
   -X PUT \
   -u "API_KEY" \
   -d title="Update the customer excel sheet"
@@ -258,7 +310,7 @@ var manatoo = require('manatoo')('API_KEY');
 // This can be done two ways
 
 // 1. If you have a task instance
-manatoo.task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+manatoo.task.find('tRhW-T_EV5gy', true)
 .then(function(task) {
   // this returns a promise that has the task instance as its parameter
   return task.update({
@@ -268,7 +320,7 @@ manatoo.task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
 
 // 2. If you have a task id
 // this returns a promise that has the json body as its parameter
-manatoo.task.update('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', {
+manatoo.task.update('tRhW-T_EV5gy', {
   title: 'Update the customer excel sheet'
 })
 ```
@@ -291,7 +343,7 @@ This endpoint is used to update the attributes of a task.
 
 ### HTTP Request
 
-`PUT https://manatoo.io/tasks/<task_id>`
+`PUT https://manatoo.io/api/tasks/<task_id>`
 
 ### URL Parameters
 
@@ -319,15 +371,17 @@ Manatoo.api_key = 'API_KEY'
 # This can be done two ways
 
 # 1. If you have a task instance
-task = Manatoo::Task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+task = Manatoo::Task.find('tRhW-T_EV5gy', true)
 task.update_status('finished')
 
 # 2. If you have a task id
-Manatoo::Task.update_status('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', 'finished')
+Manatoo::Task.update_status('tRhW-T_EV5gy', 'finished')
+
+# Note: the ruby json Hash has its keys snake_cased to follow the ruby naming conventions
 ```
 
 ```shell
-curl "https://manatoo.io/api/tasks/tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg/status" \
+curl "https://manatoo.io/api/tasks/tRhW-T_EV5gy/status" \
   -X PUT \
   -u "API_KEY" \
   -d status="finished"
@@ -339,7 +393,7 @@ var manatoo = require('manatoo')('API_KEY');
 // This can be done two ways
 
 // 1. If you have a task instance
-manatoo.task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+manatoo.task.find('tRhW-T_EV5gy', true)
 .then(function(task) {
   // this returns a promise that has the task instance as its parameter
   return task.updateStatus('finished');
@@ -347,7 +401,7 @@ manatoo.task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
 
 // 2. If you have a task id
 // this returns a promise that has the json body as its parameter
-manatoo.task.updateStatus('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', 'finished')
+manatoo.task.updateStatus('tRhW-T_EV5gy', 'finished')
 ```
 
 > The above command returns JSON structured like this:
@@ -385,18 +439,18 @@ Manatoo.api_key = 'API_KEY'
 # This can be done two ways
 
 # 1. If you have a task instance
-task = Manatoo::Task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+task = Manatoo::Task.find('tRhW-T_EV5gy', true)
 task.add_labels(['awesome', 'another label'])
 
 # 2. If you have a task id
-Manatoo::Task.add_labels('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', [
+Manatoo::Task.add_labels('tRhW-T_EV5gy', [
   'awesome',
   'another label'
 ])
 ```
 
 ```shell
-curl "https://manatoo.io/api/tasks/tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg/labels" \
+curl "https://manatoo.io/api/tasks/tRhW-T_EV5gy/labels" \
   -u "API_KEY" \
   -d labels[]="awesome" \
   -d labels[]="another label"
@@ -408,7 +462,7 @@ var manatoo = require('manatoo')('API_KEY');
 // This can be done two ways
 
 // 1. If you have a task instance
-manatoo.task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+manatoo.task.find('tRhW-T_EV5gy', true)
 .then(function(task) {
   // this returns a promise that has the task instance as its parameter
   return task.addLabels([
@@ -419,7 +473,7 @@ manatoo.task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
 
 // 2. If you have a task id
 // this returns a promise that has the json body as its parameter
-manatoo.task.addLabels('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', [
+manatoo.task.addLabels('tRhW-T_EV5gy', [
   'awesome',
   'another label'
 ]);
@@ -462,15 +516,15 @@ Manatoo.api_key = 'API_KEY'
 # This can be done two ways
 
 # 1. If you have a task instance
-task = Manatoo::Task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+task = Manatoo::Task.find('tRhW-T_EV5gy', true)
 task.add_weight(2)
 
 # 2. If you have a task id
-Manatoo::Task.add_weight('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', 2)
+Manatoo::Task.add_weight('tRhW-T_EV5gy', 2)
 ```
 
 ```shell
-curl "https://manatoo.io/api/tasks/tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg/weight" \
+curl "https://manatoo.io/api/tasks/tRhW-T_EV5gy/weight" \
   -u "API_KEY" \
   -d weight="2"
 ```
@@ -481,7 +535,7 @@ var manatoo = require('manatoo')('API_KEY');
 // This can be done two ways
 
 // 1. If you have a task instance
-manatoo.task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+manatoo.task.find('tRhW-T_EV5gy', true)
 .then(function(task) {
   // this returns a promise that has the task instance as its parameter
   return task.addWeight(2);
@@ -489,7 +543,7 @@ manatoo.task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
 
 // 2. If you have a task id
 // this returns a promise that has the json body as its parameter
-manatoo.task.addWeight('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', 2);
+manatoo.task.addWeight('tRhW-T_EV5gy', 2);
 ```
 
 > The above command returns JSON structured like this:
@@ -503,6 +557,8 @@ manatoo.task.addWeight('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', 2);
 ```
 
 This endpoint adds weight to a task. For example, if the task already has a weight of 10, passing in a `weight` of 5 to this endpoint will result in the task having an updated weight of 15.  This endpoint returns the updated weight.
+
+<aside class="notice">What is weight used for? That's up to you. Some common uses are to signify the urgency or importance of a task.</aside>
 
 ### HTTP Request
 
@@ -524,24 +580,26 @@ Manatoo.api_key = 'API_KEY'
 # This can be done two ways
 
 # 1. If you have a task instance
-task = Manatoo::Task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+task = Manatoo::Task.find('tRhW-T_EV5gy', true)
 task.add_users([
   "john@example.com",
-  "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+  "PJwjWbo0thle"
 ])
 
 # 2. If you have a task id
-Manatoo::Task.add_users('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', [
+Manatoo::Task.add_users('tRhW-T_EV5gy', [
   "john@example.com",
-  "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+  "PJwjWbo0thle"
 ])
+
+# Note: the ruby json Hash has its keys snake_cased to follow the ruby naming conventions
 ```
 
 ```shell
-curl "https://manatoo.io/api/tasks/tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg/users" \
+curl "https://manatoo.io/api/tasks/tRhW-T_EV5gy/users" \
   -u "API_KEY" \
   -d users[]="john@example.com" \
-  -d users[]="PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+  -d users[]="PJwjWbo0thle"
 ```
 
 ```javascript
@@ -550,20 +608,20 @@ var manatoo = require('manatoo')('API_KEY');
 // This can be done two ways
 
 // 1. If you have a task instance
-manatoo.task.add('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+manatoo.task.add('tRhW-T_EV5gy', true)
 .then(function(task) {
   // this returns a promise that has the task instance as its parameter
   return task.addUsers([
     "john@example.com",
-    "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+    "PJwjWbo0thle"
   ]);
 });
 
 // 2. If you have a task id
 // this returns a promise that has the json body as its parameter
-manatoo.task.addUsers('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', [
+manatoo.task.addUsers('tRhW-T_EV5gy', [
   "john@example.com",
-  "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+  "PJwjWbo0thle"
 ]);
 ```
 
@@ -574,19 +632,19 @@ manatoo.task.addUsers('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', [
   "data": {
     "users": [
       {
-        "token": "KLkg8FcZOCas5LnVLHm9hEKdAKw0Wg",
+        "token": "KLkg8FcZOCas",
         "profileImageUrl": null,
         "firstName": "John",
         "lastName": "Lowe"
       },
       {
-        "token": "hrKavGdYRU7YBChs3swqeoDvPl_azw",
+        "token": "hrKavGdYRU7Y",
         "profileImageUrl": null,
         "firstName": "Alex",
         "lastName": "Simms"
       },
       {
-        "token": "PJwjWbo0thleCsA_A7XSfKRSAxNz5w",
+        "token": "PJwjWbo0thle",
         "profileImageUrl": "https://imgur.com/URBc9Kb.png",
         "firstName": "Ashley",
         "lastName": "Vonn"
@@ -618,25 +676,27 @@ Manatoo.api_key = 'API_KEY'
 # This can be done two ways
 
 # 1. If you have a task instance
-task = Manatoo::Task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+task = Manatoo::Task.find('tRhW-T_EV5gy', true)
 task.remove_users([
   "john@example.com",
-  "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+  "PJwjWbo0thle"
 ])
 
 # 2. If you have a task id
-Manatoo::Task.remove_users('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', [
+Manatoo::Task.remove_users('tRhW-T_EV5gy', [
   "john@example.com",
-  "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+  "PJwjWbo0thle"
 ])
+
+# Note: the ruby json Hash has its keys snake_cased to follow the ruby naming conventions
 ```
 
 ```shell
-curl "https://manatoo.io/api/tasks/tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg/users" \
+curl "https://manatoo.io/api/tasks/tRhW-T_EV5gy/users" \
   -X DELETE \
   -u "API_KEY" \
   -d users[]="john@example.com" \
-  -d users[]="PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+  -d users[]="PJwjWbo0thle"
 ```
 
 ```javascript
@@ -645,20 +705,20 @@ var manatoo = require('manatoo')('API_KEY');
 // This can be done two ways
 
 // 1. If you have a task instance
-manatoo.task.find('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg')
+manatoo.task.find('tRhW-T_EV5gy', true)
 .then(function(task) {
   // this returns a promise that has the task instance as its parameter
   return task.removeUsers([
     "john@example.com",
-    "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+    "PJwjWbo0thle"
   ]);
 });
 
 // 2. If you have a task id
 // this returns a promise that has the json body as its parameter
-manatoo.task.removeUsers('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', [
+manatoo.task.removeUsers('tRhW-T_EV5gy', [
   "john@example.com",
-  "PJwjWbo0thleCsA_A7XSfKRSAxNz5w"
+  "PJwjWbo0thle"
 ]);
 ```
 
@@ -669,7 +729,7 @@ manatoo.task.removeUsers('tRhW-T_EV5gyeMK4sDfSz7rEQWq-Yg', [
   "data": {
     "users": [
       {
-        "token": "hrKavGdYRU7YBChs3swqeoDvPl_azw",
+        "token": "hrKavGdYRU7Y",
         "profileImageUrl": null,
         "firstName": "Alex",
         "lastName": "Simms"
