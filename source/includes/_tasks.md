@@ -179,7 +179,7 @@ manatoo.task.create({
     region: "us-west"
   }
 }).then(function(json) {
-  return json
+  return json;
 });
 
 // but you can pass in true as the second parameter to return a task instance
@@ -251,7 +251,7 @@ manatoo.task.create({
 }
 ```
 
-This endpoint create a task. There are two required parameters: `title` and `list_id`. You will need an existing list; you can create one through our web app.
+This endpoint creates a task. There are two required parameters: `title` and `list_id`. You will need an existing list; you can create one through our web app.
 
 The `title` briefly describes what the task is.  The `list_id` can be found in the overview section of a list's page or can be taken from a list's url: `https://manatoo.io/lists/<list_id>`.
 

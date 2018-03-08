@@ -13,6 +13,7 @@ toc_footers:
 
 includes:
   - tasks
+  - events
   - errors
 
 search: true
@@ -53,7 +54,7 @@ var manatoo = require('manatoo')('API_KEY');
 
 > Make sure to replace `API_KEY` with your API key and `API_ENDPOINT` with the endpoint you are trying to access.
 
-Manatoo uses API keys to allow access to the API. You can view your api key on the lists page once you log into your account.
+Manatoo uses API keys to allow access to the API. You can view your api key on the home page once you log into your account.
 
 Manatoo expects for the API key to be included in all API requests to the server.
 
