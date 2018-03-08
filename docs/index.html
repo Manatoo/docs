@@ -261,6 +261,14 @@
               </ul>
           </li>
           <li>
+            <a href="#events" class="toc-h1 toc-link" data-title="events">Events</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#creating-an-event" class="toc-h2 toc-link" data-title="creating-an-event">Creating an Event</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#errors" class="toc-h1 toc-link" data-title="errors">Errors</a>
           </li>
       </div>
@@ -297,7 +305,7 @@ curl <span class="s2">"https:/manatoo.io/api/API_ENDPOINT"</span> <span class="s
 <p>Make sure to replace <code>API_KEY</code> with your API key and <code>API_ENDPOINT</code> with the endpoint you are trying to access.</p>
 </blockquote>
 
-<p>Manatoo uses API keys to allow access to the API. You can view your api key on the lists page once you log into your account.</p>
+<p>Manatoo uses API keys to allow access to the API. You can view your api key on the home page once you log into your account.</p>
 
 <p>Manatoo expects for the API key to be included in all API requests to the server.</p>
 
@@ -466,7 +474,7 @@ You must replace <code>API_KEY</code> with your personal API key.
     <span class="na">region</span><span class="p">:</span> <span class="s2">"us-west"</span>
   <span class="p">}</span>
 <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">json</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">json</span>
+  <span class="k">return</span> <span class="nx">json</span><span class="p">;</span>
 <span class="p">});</span>
 
 <span class="c1">// but you can pass in true as the second parameter to return a task instance</span>
@@ -536,7 +544,7 @@ You must replace <code>API_KEY</code> with your personal API key.
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint create a task. There are two required parameters: <code>title</code> and <code>list_id</code>. You will need an existing list; you can create one through our web app.</p>
+<p>This endpoint creates a task. There are two required parameters: <code>title</code> and <code>list_id</code>. You will need an existing list; you can create one through our web app.</p>
 
 <p>The <code>title</code> briefly describes what the task is.  The <code>list_id</code> can be found in the overview section of a list&#39;s page or can be taken from a list&#39;s url: <code>https://manatoo.io/lists/&lt;list_id&gt;</code>.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
@@ -1070,6 +1078,49 @@ You must replace <code>API_KEY</code> with your personal API key.
 <tr>
 <td>users</td>
 <td>An <code>array</code> of <code>strings</code> that represents the users of the task.  The strings must be the <code>email</code> login of a user or the <code>token</code> of a user.  Supplied users must also be members of the list the task is added to.  Users that do not fulfill the requirements will not be deleted from the task. REQUIRED.</td>
+</tr>
+</tbody></table>
+<h1 id='events'>Events</h1><h2 id='creating-an-event'>Creating an Event</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'manatoo'</span>
+<span class="no">Manatoo</span><span class="p">.</span><span class="nf">api_key</span> <span class="o">=</span> <span class="s1">'API_KEY'</span>
+
+<span class="n">json</span> <span class="o">=</span> <span class="no">Manatoo</span><span class="o">::</span><span class="no">Event</span><span class="p">.</span><span class="nf">create</span><span class="p">({</span>
+  <span class="ss">name: </span><span class="s1">'user_signup'</span>
+<span class="p">})</span>
+
+<span class="c1"># Note: the ruby json Hash has its keys snake_cased to follow the ruby naming conventions</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://manatoo.io/api/events"</span> <span class="se">\</span>
+  -u <span class="s2">"API_KEY"</span> <span class="se">\</span>
+  -d <span class="nv">name</span><span class="o">=</span><span class="s1">'user_signup'</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">manatoo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'manatoo'</span><span class="p">)(</span><span class="s1">'API_KEY'</span><span class="p">);</span>
+
+<span class="nx">manatoo</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+  <span class="na">name</span><span class="p">:</span> <span class="s1">'user_signup'</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">json</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">json</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_signup"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint creates an event. The name of the event, <code>name</code>, is required. This can be any string.</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>POST https://manatoo.io/api/events</code></p>
+<h3 id='url-parameters'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>The name of the event. REQUIRED.</td>
 </tr>
 </tbody></table>
 <h1 id='errors'>Errors</h1>
